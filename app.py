@@ -326,9 +326,8 @@ def process_anh(config):
         if cg_fresh and skip_cg_fresh and cg_renewal:
             skipped += 1; continue
 
-        # Determine pol_agent_code and outgo
-        # Use relationship code if available, else imd_code
-        agent_code = rel_code if rel_code and rel_code not in ('-', 'Pan india', '') else imd_code
+        # Determine pol_agent_code: always use IMD Code
+        agent_code = imd_code
 
         def _make_row(tob, rate, age_ll, age_ul, tsi_ll=None, tsi_ul=None, outgo=None):
             nonlocal uid

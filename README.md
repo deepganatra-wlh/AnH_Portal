@@ -183,7 +183,7 @@ Version Id*,Pol Agent Code*,Product Code*,...
 3. **Renewal Age > 60 row** — generated when the Renewal60 column has a rate that differs from the standard renewal rate. `Insured Age Ll` = `61`.
 4. **Common Grid rows** — rows where the rate value is `Common grid` or `-` use `Pol Agent Code` = `ANY` and `Outgo` = `GWP`.
 5. **Specific rate rows** — rows with an actual numeric rate use the IMD/Relationship code and `Outgo` = `RGWP`.
-6. **Agent code priority** — Relationship Code is used when present and not `Pan India`/`-`; otherwise IMD Code is used.
+6. **Agent code** — the IMD Code column is always used as `Pol Agent Code*`. The Relationship Code column is not used for this mapping.
 7. **Rate cleaning** — rates stored as decimals (e.g. `0.3814`) are multiplied by 100 to give a percentage (`38.14`). Percent strings like `33.90%` are stripped of the `%` sign.
 8. **Status filtering** — rows whose status column does not match the configured active statuses (default: `active`) are skipped.
 9. **Blank rows skipped** — rows with no IMD Code and no Relationship Code are skipped.
