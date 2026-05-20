@@ -104,6 +104,29 @@ def is_common_grid(val):
     return str(val).strip() in ('Common grid', '-', '', 'None')
 
 
+# Product codes that are exclusively covered by the renewal60 (age > 60) row.
+# The column header itself says: "If the insured or member age is > 60 and
+# product code is 6111, 6117, 6118".  When a renewal60 rate is present these
+# codes must be REMOVED from the regular renewal row to prevent overlap.
+RENEWAL60_EXCLUSIVE_CODES = {'6111', '6117', '6118'}
+
+
+def exclude_codes_from_product_string(product_code_str, codes_to_exclude):
+    """
+    Remove specific product codes from a comma-separated product code string.
+    Returns the filtered string, or None if no codes remain.
+
+    Example:
+        exclude_codes_from_product_string('6116, 6111, 6117, 6118, 6119', {'6111','6117','6118'})
+        → '6116, 6119'
+    """
+    if not product_code_str:
+        return product_code_str
+    codes = [c.strip() for c in str(product_code_str).split(',')]
+    filtered = [c for c in codes if c not in codes_to_exclude]
+    return ', '.join(filtered) if filtered else None
+
+
 VOL_SLAB_MAP = {
     '-':                (-1e10, 1e11),
     '':                 (-1e10, 1e11),
@@ -329,7 +352,8 @@ def process_anh(config):
         # Determine pol_agent_code: always use IMD Code
         agent_code = imd_code
 
-        def _make_row(tob, rate, age_ll, age_ul, tsi_ll=None, tsi_ul=None, outgo=None):
+        def _make_row(tob, rate, age_ll, age_ul, tsi_ll=None, tsi_ul=None, outgo=None,
+                      product_code_override=None):
             nonlocal uid
             # If rate is None or common grid → use common grid logic
             is_cg = (rate is None)
@@ -338,7 +362,7 @@ def process_anh(config):
             r = {
                 'Version Id*':          version_id,
                 'Pol Agent Code*':      pol_code,
-                'Product Code*':        product_code,
+                'Product Code*':        product_code_override if product_code_override is not None else product_code,
                 'Final Nm Gwp Ll*':     gwp_ll,
                 'Final Nm Gwp Ul*':     gwp_ul,
                 'Type Of Business*':    tob,
@@ -360,14 +384,30 @@ def process_anh(config):
                 rows.append(_make_row('New', fresh_rate, def_age_ll, def_age_ul))
 
         # ── Renewal Business row ────────────────────────────────────────────
+        # When a renewal60 rate exists the codes 6111/6117/6118 are exclusively
+        # owned by that row.  Strip them from the regular renewal row so the two
+        # rows never overlap on product codes.
         if not cg_renewal or not skip_cg_renewal:
             if renewal_rate is not None:
-                rows.append(_make_row('Renewal', renewal_rate, def_age_ll, def_age_ul))
+                renewal_product_code = product_code
+                if r60_rate is not None and r60_rate != renewal_rate:
+                    renewal_product_code = exclude_codes_from_product_string(
+                        product_code, RENEWAL60_EXCLUSIVE_CODES
+                    )
+                if renewal_product_code:   # skip if all codes were stripped
+                    rows.append(_make_row('Renewal', renewal_rate, def_age_ll, def_age_ul,
+                                         product_code_override=renewal_product_code))
 
         # ── Renewal age > 60 row ────────────────────────────────────────────
-        # Only when renewal60 col has a rate different from renewal rate
+        # Only for product codes 6111, 6117, 6118 (as per column header).
+        # Only when renewal60 col has a rate different from renewal rate.
         if r60_rate is not None and r60_rate != renewal_rate:
-            rows.append(_make_row('Renewal', r60_rate, r60_age_ll, r60_age_ul))
+            # Intersect the row's product codes with the renewal60 exclusive set
+            row_codes = {c.strip() for c in str(product_code).split(',')} if product_code else set()
+            r60_codes = ', '.join(c for c in ['6111', '6117', '6118'] if c in row_codes)
+            if r60_codes:
+                rows.append(_make_row('Renewal', r60_rate, r60_age_ll, r60_age_ul,
+                                      product_code_override=r60_codes))
 
     wb.close()
     return pd.DataFrame(rows), skipped, uid - 1
