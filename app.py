@@ -383,28 +383,38 @@ def process_anh(config):
             if fresh_rate is not None:
                 rows.append(_make_row('New', fresh_rate, def_age_ll, def_age_ul))
 
-        # ── Renewal Business row ────────────────────────────────────────────
-        # When a renewal60 rate exists the codes 6111/6117/6118 are exclusively
-        # owned by that row.  Strip them from the regular renewal row so the two
-        # rows never overlap on product codes.
+        # ── Renewal Business rows ───────────────────────────────────────────
+        # When a renewal60 rate exists for codes 6111/6117/6118, the renewal
+        # rows split into:
+        #   A) 6111, 6117, 6118  | age 0-60    | renewal_rate
+        #   B) other codes       | age 0-1000  | renewal_rate
+        #   C) 6111, 6117, 6118  | age 61-1000 | r60_rate       (r60 row below)
+        # When no renewal60 split applies, a single row covers all codes.
         if not cg_renewal or not skip_cg_renewal:
             if renewal_rate is not None:
-                renewal_product_code = product_code
-                if r60_rate is not None and r60_rate != renewal_rate:
-                    renewal_product_code = exclude_codes_from_product_string(
-                        product_code, RENEWAL60_EXCLUSIVE_CODES
-                    )
-                if renewal_product_code:   # skip if all codes were stripped
-                    rows.append(_make_row('Renewal', renewal_rate, def_age_ll, def_age_ul,
-                                         product_code_override=renewal_product_code))
+                row_codes_set = {c.strip() for c in str(product_code).split(',')} if product_code else set()
+                r60_present = r60_rate is not None and r60_rate != renewal_rate
+                overlap_codes = ', '.join(c for c in ['6111', '6117', '6118'] if c in row_codes_set)
+
+                if r60_present and overlap_codes:
+                    # A) 6111/6117/6118 at renewal rate, age 0 to 60
+                    rows.append(_make_row('Renewal', renewal_rate, def_age_ll, r60_age_ll - 1,
+                                         product_code_override=overlap_codes))
+                    # B) remaining codes at renewal rate, full age range
+                    other_codes = exclude_codes_from_product_string(product_code, RENEWAL60_EXCLUSIVE_CODES)
+                    if other_codes:
+                        rows.append(_make_row('Renewal', renewal_rate, def_age_ll, def_age_ul,
+                                             product_code_override=other_codes))
+                else:
+                    # No r60 split — single renewal row for all codes
+                    rows.append(_make_row('Renewal', renewal_rate, def_age_ll, def_age_ul))
 
         # ── Renewal age > 60 row ────────────────────────────────────────────
-        # Only for product codes 6111, 6117, 6118 (as per column header).
-        # Only when renewal60 col has a rate different from renewal rate.
+        # C) Only codes 6111, 6117, 6118 (as per column header), age 61-1000.
+        #    Only when renewal60 col has a rate different from the renewal rate.
         if r60_rate is not None and r60_rate != renewal_rate:
-            # Intersect the row's product codes with the renewal60 exclusive set
-            row_codes = {c.strip() for c in str(product_code).split(',')} if product_code else set()
-            r60_codes = ', '.join(c for c in ['6111', '6117', '6118'] if c in row_codes)
+            row_codes_set = {c.strip() for c in str(product_code).split(',')} if product_code else set()
+            r60_codes = ', '.join(c for c in ['6111', '6117', '6118'] if c in row_codes_set)
             if r60_codes:
                 rows.append(_make_row('Renewal', r60_rate, r60_age_ll, r60_age_ul,
                                       product_code_override=r60_codes))
