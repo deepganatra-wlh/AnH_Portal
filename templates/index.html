@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AnH Grid Processor</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>AnH Grid Processor · Wonderlend Hubs</title>
+  <link rel="icon" type="image/png" href="/static/brand/favicon.png"/><link rel="apple-touch-icon" href="/static/brand/apple-touch-icon.png"/><meta name="theme-color" content="#061C3A"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg:         #0d0f12;
-      --bg2:        #141720;
-      --bg3:        #1c2030;
-      --border:     #2a2f3d;
-      --border2:    #3a4155;
-      --accent:     #4fffb0;
-      --accent2:    #00c87a;
-      --warn:       #ffb347;
-      --danger:     #ff5555;
-      --muted:      #5a6380;
-      --text:       #d6dbe8;
-      --text2:      #8b95ac;
-      --mono:       'IBM Plex Mono', monospace;
-      --sans:       'IBM Plex Sans', sans-serif;
+      --bg:         #F5F7FB;
+      --bg2:        #FFFFFF;
+      --bg3:        #F2F5FA;
+      --border:     #E3E7EE;
+      --border2:    #D5DBE5;
+      --accent:     #7B2569;
+      --accent2:    #1A7F54;
+      --warn:       #A84D0E;
+      --danger:     #CC0F51;
+      --muted:      #6B7585;
+      --text:       #061C3A;
+      --text2:      #5B6472;
+      --mono:       'JetBrains Mono', monospace;
+      --sans:       'Inter', system-ui, sans-serif;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -114,7 +114,7 @@
     .step-item.done .step-num {
       border-color: var(--accent);
       color: var(--accent);
-      background: rgba(79,255,176,0.08);
+      background: rgba(123,37,105,0.08);
     }
     .step-label {
       font-size: 0.78rem;
@@ -204,7 +204,7 @@
     }
     .drop-zone:hover, .drop-zone.dragover {
       border-color: var(--accent);
-      background: rgba(79,255,176,0.04);
+      background: rgba(123,37,105,0.04);
     }
     .drop-zone input[type=file] {
       position: absolute; inset: 0;
@@ -241,7 +241,7 @@
     .file-badge {
       font-family: var(--mono);
       font-size: 0.7rem;
-      background: rgba(79,255,176,0.1);
+      background: rgba(123,37,105,0.1);
       color: var(--accent);
       padding: 2px 8px;
       border-radius: 3px;
@@ -343,9 +343,9 @@
     }
     .btn-primary {
       background: var(--accent);
-      color: #0d1017;
+      color: #FFFFFF;
     }
-    .btn-primary:hover { background: #6fffc0; }
+    .btn-primary:hover { background: var(--accent); }
     .btn-primary:disabled {
       background: var(--border2);
       color: var(--muted);
@@ -358,11 +358,11 @@
     }
     .btn-secondary:hover { border-color: var(--accent2); color: var(--accent2); }
     .btn-danger {
-      background: rgba(255,85,85,0.12);
+      background: rgba(233,20,94,0.12);
       color: var(--danger);
-      border: 1px solid rgba(255,85,85,0.3);
+      border: 1px solid rgba(233,20,94,0.3);
     }
-    .btn-danger:hover { background: rgba(255,85,85,0.2); }
+    .btn-danger:hover { background: rgba(233,20,94,0.2); }
     .btn-row {
       display: flex;
       gap: 0.75rem;
@@ -392,18 +392,18 @@
     }
     .alert.visible { display: block; }
     .alert-error {
-      background: rgba(255,85,85,0.1);
-      border: 1px solid rgba(255,85,85,0.3);
-      color: #ff8888;
+      background: rgba(233,20,94,0.1);
+      border: 1px solid rgba(233,20,94,0.3);
+      color: #CC0F51;
     }
     .alert-success {
-      background: rgba(79,255,176,0.08);
-      border: 1px solid rgba(79,255,176,0.25);
+      background: rgba(123,37,105,0.08);
+      border: 1px solid rgba(123,37,105,0.25);
       color: var(--accent);
     }
     .alert-warn {
-      background: rgba(255,179,71,0.1);
-      border: 1px solid rgba(255,179,71,0.3);
+      background: rgba(242,146,75,0.1);
+      border: 1px solid rgba(242,146,75,0.3);
       color: var(--warn);
     }
 
@@ -479,7 +479,7 @@
       color: var(--text2);
     }
     .tag.active-tag {
-      background: rgba(79,255,176,0.1);
+      background: rgba(123,37,105,0.1);
       border-color: var(--accent2);
       color: var(--accent);
     }
@@ -523,8 +523,8 @@
       align-items: center;
       gap: 1.5rem;
       padding: 1.25rem 1.5rem;
-      background: rgba(79,255,176,0.05);
-      border: 1px solid rgba(79,255,176,0.2);
+      background: rgba(123,37,105,0.05);
+      border: 1px solid rgba(123,37,105,0.2);
       border-radius: 8px;
     }
     .download-icon { font-size: 2rem; }
@@ -546,15 +546,79 @@
       aside { display: none; }
       main { padding: 1.25rem; }
     }
+
+/* ══════════════════════════════════════════════════════════════════════
+   Wonderlend Hubs brand layer — brand guidelines v1.0 (2026)
+   Ink Navy grounds · rose→purple gradient signs · orange lifts moments
+   Poppins for headings, Inter for body/UI, JetBrains Mono kept for data
+   ══════════════════════════════════════════════════════════════════════ */
+:root{
+  --wl-navy:#061C3A;--wl-rose:#E9145E;--wl-purple:#7B2569;--wl-orange:#F2924B;
+  --wl-hair:#E3E7EE;--wl-grey:#5B6472;--wl-lav:#F3EEF8;--wl-bw:#EFF3FA;--wl-rw:#FDEEF3;
+  --wl-grad:linear-gradient(90deg,#F2924B 0%,#E9145E 38%,#7B2569 72%,#061C3A 100%);
+  --wl-hd:'Poppins',system-ui,sans-serif;
+  --wl-shadow:0 1px 2px rgba(6,28,58,.04),0 2px 8px rgba(6,28,58,.04);
+}
+html,body{-webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-family:var(--wl-hd);letter-spacing:-.01em;color:var(--wl-navy);}
+::selection{background:rgba(233,20,94,.16);}
+:focus-visible{outline:2px solid var(--wl-purple);outline-offset:2px;}
+.wl-logo{display:block;width:152px;height:auto;margin-bottom:14px;}
+
+/* Header — Ink Navy ground, white logo top-left, signature gradient rule underneath */
+header{background:var(--wl-navy);border-bottom:none;height:64px;position:relative;}
+header::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:3px;background:var(--wl-grad);z-index:2;}
+.wl-logo-header{width:132px;margin:0;}
+.wl-divider{width:1px;height:22px;background:rgba(255,255,255,.22);}
+.wl-app-name{font-family:var(--wl-hd);font-weight:600;font-size:.92rem;color:#FFFFFF;}
+.wl-app-name span{font-family:var(--sans);font-weight:400;font-size:.75rem;color:rgba(255,255,255,.6);margin-left:.5rem;}
+.status-bar{color:rgba(255,255,255,.65);}
+.status-dot{background:rgba(255,255,255,.35);}
+.status-dot.active{background:var(--wl-rose);box-shadow:0 0 0 3px rgba(233,20,94,.25);}
+
+/* Sidebar — white, hairline edge, rose marker on the active step */
+aside{background:#FFFFFF;border-right:1px solid var(--border);padding-top:1.75rem;}
+.sidebar-section-title{font-family:var(--wl-hd);font-weight:600;letter-spacing:.14em;}
+.step-item:hover{background:var(--bg3);}
+.step-item.active{background:var(--wl-lav);box-shadow:inset 3px 0 0 var(--wl-rose);}
+.step-item.active .step-num{border-color:var(--wl-rose);background:var(--wl-rose);color:#FFFFFF;}
+.step-item.done .step-num{border-color:var(--accent2);background:var(--accent2);color:#FFFFFF;}
+.step-item.active .step-label{color:var(--wl-navy);font-weight:600;}
+
+/* Type: Poppins for headings and eyebrows, Inter for UI, mono only for data */
+.page-title{font-family:var(--wl-hd);font-size:1.5rem;font-weight:700;}
+.page-title::before{width:4px;background:linear-gradient(180deg,var(--wl-orange),var(--wl-rose),var(--wl-purple));}
+.card-title{font-family:var(--wl-hd);color:var(--wl-navy);}
+.form-group label,.col-item label,.drop-hint,.stat-label{font-family:var(--sans);}
+.form-group label,.col-item label{font-weight:600;color:var(--text2);}
+.stat-value{font-family:var(--wl-hd);}
+.download-info h3{font-family:var(--wl-hd);}
+
+/* Surfaces */
+.card,.stat-tile{box-shadow:var(--wl-shadow);}
+.stat-tile{background:#FFFFFF;}
+input[type=text],input[type=number],select,textarea{background:#FFFFFF;}
+.drop-zone{background:#FFFFFF;}
+
+/* Pill buttons — Ink Navy for the main action */
+.btn{font-family:var(--sans);letter-spacing:0;border-radius:999px;}
+.btn-primary{background:var(--wl-navy);color:#FFFFFF;}
+.btn-primary:hover{background:var(--wl-purple);}
+.btn-primary:disabled{background:var(--border);color:var(--muted);}
+.btn-secondary{background:#FFFFFF;}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+
+/* Success keeps its own (functional) green; brand accents stay purple/rose */
+.alert-success{background:rgba(26,127,84,.07);border-color:rgba(26,127,84,.25);color:#1A7F54;}
   </style>
 </head>
 <body>
 
 <!-- ══ HEADER ══ -->
 <header>
-  <div class="logo">AnH<span>/grid</span></div>
-  <div style="width:1px;height:20px;background:var(--border);"></div>
-  <span style="font-size:0.75rem;color:var(--text2);">Agency &amp; Health Grid Processor</span>
+  <img class="wl-logo wl-logo-header" src="/static/brand/wonderlend-hubs-logo-white.png" alt="Wonderlend Hubs" width="132" height="25"/>
+  <div class="wl-divider"></div>
+  <span class="wl-app-name">AnH Grid Processor <span>Agency &amp; Health</span></span>
   <div class="status-bar">
     <div class="status-dot" id="statusDot"></div>
     <span id="statusText">idle</span>
